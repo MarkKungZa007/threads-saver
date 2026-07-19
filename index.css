@@ -1,0 +1,839 @@
+/* Retro Windows 98 Theme for ThreadsSaver */
+
+:root {
+    --win-bg: #d4d0c8;
+    --win-face: #d4d0c8;
+    --win-shadow: #808080;
+    --win-shadow-dark: #0a0a0a;
+    --win-highlight: #ffffff;
+    --win-text: #000000;
+    --win-text-muted: #808080;
+    
+    --win-blue-start: #000080;
+    --win-blue-end: #1084d0;
+    
+    --success-green: #008000;
+    --error-red: #800000;
+    --primary-violet: #800080;
+    --primary-blue: #0000ff;
+    
+    --font-win: Tahoma, "Segoe UI", Arial, sans-serif;
+    --font-heading: Tahoma, "Segoe UI", Arial, sans-serif;
+    --font-body: Tahoma, "Segoe UI", Arial, sans-serif;
+}
+
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #008080; /* Retro Desktop Teal */
+    color: var(--win-text);
+    font-family: var(--font-win);
+    font-size: 13px;
+    line-height: 1.4;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Hide modern decorative elements */
+.background-decor, .blur-orb {
+    display: none !important;
+}
+
+/* Container */
+.app-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* App Header - styled like a taskbar or dialog */
+.app-header {
+    background: var(--win-bg);
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-highlight), 
+                inset -1.5px -1.5px 0px var(--win-shadow), 
+                inset 3px 3px 0px #e6e6e6, 
+                inset -3px -3px 0px var(--win-shadow-dark);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    color: var(--win-blue-start);
+}
+
+.logo span {
+    font-family: var(--font-win);
+    font-weight: bold;
+    font-size: 1.6rem;
+    color: var(--win-text);
+}
+
+.logo span span {
+    color: var(--win-blue-start);
+}
+
+.app-header p {
+    font-size: 0.85rem;
+    color: var(--win-text-muted);
+}
+
+/* Main Grid Layout */
+.workspace-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 15px;
+    align-items: start;
+}
+
+/* Sidebar History Panel - styled as a Window */
+.sidebar-panel {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 150px);
+    background: var(--win-bg);
+    padding: 3px;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-highlight), 
+                inset -1.5px -1.5px 0px var(--win-shadow), 
+                inset 3px 3px 0px #e6e6e6, 
+                inset -3px -3px 0px var(--win-shadow-dark);
+}
+
+.sidebar-header {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-bottom: 2px solid var(--win-shadow);
+    background: var(--win-bg);
+}
+
+.sidebar-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-title-row h3 {
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sidebar-header p {
+    font-size: 0.75rem;
+    color: var(--win-text-muted);
+}
+
+/* Dropdown Sort Select */
+.sort-select {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: none !important;
+    box-shadow: inset 1px 1px 0px var(--win-shadow-dark),
+                inset -1px -1px 0px var(--win-highlight),
+                inset 2px 2px 0px var(--win-shadow),
+                inset -2px -2px 0px #e6e6e6 !important;
+    font-family: var(--font-win);
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Filter Row */
+.filter-row {
+    display: flex;
+    gap: 4px;
+    margin-top: 5px;
+    padding-bottom: 5px;
+}
+
+.filter-btn {
+    background: var(--win-bg) !important;
+    color: var(--win-text) !important;
+    border: none !important;
+    box-shadow: inset 1px 1px 0px var(--win-highlight), 
+                inset -1px -1px 0px var(--win-shadow), 
+                inset 2px 2px 0px #e6e6e6, 
+                inset -2px -2px 0px var(--win-shadow-dark) !important;
+    font-family: var(--font-win);
+    font-size: 0.75rem;
+    padding: 4px 8px !important;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-btn.active {
+    box-shadow: inset 1px 1px 0px var(--win-shadow-dark), 
+                inset -1px -1px 0px var(--win-highlight), 
+                inset 2px 2px 0px var(--win-shadow), 
+                inset -2px -2px 0px #e6e6e6 !important;
+    background: #e6e6e6 !important;
+    font-weight: bold;
+}
+
+/* History List - White Inset File-Manager Pane */
+.history-list {
+    flex-grow: 1;
+    background: #ffffff;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-shadow-dark), 
+                inset -1.5px -1.5px 0px var(--win-highlight), 
+                inset 3px 3px 0px var(--win-shadow), 
+                inset -3px -3px 0px #e6e6e6;
+    margin: 5px;
+    overflow-y: auto;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.empty-history {
+    font-size: 0.8rem;
+    color: var(--win-text-muted);
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+}
+
+/* History Item - File Manager Row Card */
+.history-item {
+    background: #ffffff;
+    color: var(--win-text);
+    border: 3px solid transparent;
+    padding: 6px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-radius: 0px;
+}
+
+.history-item:hover {
+    background: #f0f0f0;
+}
+
+/* Highlight Selected Row Classic Blue style */
+.history-item.active {
+    background: var(--win-blue-start) !important;
+    color: var(--win-highlight) !important;
+}
+
+.history-item.active .history-item-username {
+    color: var(--win-highlight) !important;
+}
+
+.history-item.active .history-delete-btn {
+    color: var(--win-highlight) !important;
+}
+
+.history-item.active .history-schedule-badge {
+    color: #ffeb3b !important;
+}
+
+.history-item-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.history-item-username {
+    font-weight: bold;
+    font-size: 0.82rem;
+    color: var(--win-text);
+}
+
+/* Red / Green / Yellow Borders for post status */
+.history-item.posted {
+    border: 3px solid var(--error-red) !important;
+}
+
+.history-item.ready-to-post {
+    border: 3px solid var(--success-green) !important;
+}
+
+.history-item.scheduled-waiting {
+    border: 3px solid #ffb800 !important;
+}
+
+/* Thumbnails list box style */
+.history-item-thumbnails {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.history-thumb {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--win-shadow);
+    object-fit: cover;
+    background: #000;
+}
+
+.history-thumb-video {
+    width: 60px;
+    height: 60px;
+    border: 1px solid var(--win-shadow);
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--win-highlight);
+    font-size: 1.2rem;
+}
+
+/* Action Tags in List Item */
+.history-labels i {
+    font-size: 0.85rem;
+    margin-left: 2px;
+    cursor: pointer;
+}
+
+.history-delete-btn {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: var(--win-text-muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 2px !important;
+}
+
+.history-delete-btn:hover {
+    color: var(--error-red) !important;
+}
+
+/* Main Content Panel */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Card Window Styling (Download Panel, Preview Panel) */
+.glass-card {
+    background: var(--win-bg);
+    padding: 12px;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-highlight), 
+                inset -1.5px -1.5px 0px var(--win-shadow), 
+                inset 3px 3px 0px #e6e6e6, 
+                inset -3px -3px 0px var(--win-shadow-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-radius: 0px;
+    border: none;
+    backdrop-filter: none;
+}
+
+/* Header styled as Classic Blue Title Bar */
+.win98-title-bar,
+.preview-header {
+    background: linear-gradient(90deg, var(--win-blue-start), var(--win-blue-end)) !important;
+    color: var(--win-highlight) !important;
+    font-weight: bold;
+    font-size: 0.85rem;
+    padding: 3px 4px 3px 6px;
+    margin: -12px -12px 8px -12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-win);
+}
+
+.win98-title-bar *,
+.preview-header * {
+    color: var(--win-highlight) !important;
+    font-weight: bold;
+}
+
+.win-window-controls {
+    display: flex;
+    gap: 2px;
+}
+
+.win-window-controls button {
+    width: 16px !important;
+    height: 14px !important;
+    padding: 0 !important;
+    font-size: 0.65rem !important;
+    font-weight: bold !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: var(--win-bg) !important;
+    color: var(--win-text) !important;
+    border: none !important;
+    box-shadow: inset 1px 1px 0px var(--win-highlight), 
+                inset -1px -1px 0px var(--win-shadow), 
+                inset 2px 2px 0px #e6e6e6, 
+                inset -2px -2px 0px var(--win-shadow-dark) !important;
+    cursor: default !important;
+}
+
+.win-window-controls button:active {
+    padding-top: 0px !important;
+    padding-left: 0px !important;
+}
+
+/* Forms & Inputs */
+.download-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.input-wrapper {
+    position: relative;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 8px;
+    color: var(--win-shadow);
+}
+
+input[type="url"], input[type="datetime-local"], textarea {
+    width: 100%;
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-shadow-dark), 
+                inset -1.5px -1.5px 0px var(--win-highlight), 
+                inset 3px 3px 0px var(--win-shadow), 
+                inset -3px -3px 0px #e6e6e6;
+    padding: 6px 8px 6px 28px;
+    font-family: var(--font-win);
+    font-size: 0.85rem;
+    outline: none;
+    border-radius: 0px;
+}
+
+textarea {
+    padding: 6px 8px;
+}
+
+/* Buttons Outset Bevel */
+button, .btn {
+    background: var(--win-bg) !important;
+    color: var(--win-text) !important;
+    border: none !important;
+    box-shadow: inset 1px 1px 0px var(--win-highlight), 
+                inset -1px -1px 0px var(--win-shadow), 
+                inset 2px 2px 0px #e6e6e6, 
+                inset -2px -2px 0px var(--win-shadow-dark) !important;
+    font-family: var(--font-win);
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    outline: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 0px;
+}
+
+button:active, .btn:active {
+    box-shadow: inset 1px 1px 0px var(--win-shadow-dark), 
+                inset -1px -1px 0px var(--win-highlight), 
+                inset 2px 2px 0px var(--win-shadow), 
+                inset -2px -2px 0px #e6e6e6 !important;
+    padding-top: 7px !important;
+    padding-left: 15px !important;
+    padding-bottom: 5px !important;
+    padding-right: 13px !important;
+}
+
+.btn-primary {
+    font-weight: bold;
+}
+
+.btn-secondary {
+    background: var(--win-bg) !important;
+}
+
+/* Checkbox retro */
+.options-row {
+    padding-left: 2px;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.82rem;
+}
+
+/* Status Cards & Downloading Steps */
+.status-card {
+    padding: 15px;
+}
+
+.steps-tracker {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+    padding: 8px;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-shadow-dark), 
+                inset -1.5px -1.5px 0px var(--win-highlight);
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    color: var(--win-text-muted);
+}
+
+.step.active {
+    color: var(--win-blue-start);
+    font-weight: bold;
+}
+
+.step.completed {
+    color: var(--success-green);
+}
+
+/* Preview Card Details */
+.preview-card {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.preview-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 15px;
+}
+
+/* Left preview side */
+.post-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.post-author-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #e6e6e6;
+    padding: 8px;
+    border: 1px solid var(--win-shadow);
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--win-shadow);
+}
+
+.author-name {
+    font-weight: bold;
+    font-size: 0.88rem;
+}
+
+.caption-wrapper {
+    background: #fff;
+    padding: 10px 10px 22px 10px;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-shadow-dark), 
+                inset -1.5px -1.5px 0px var(--win-highlight);
+    max-height: 150px;
+    overflow-y: auto;
+    cursor: pointer;
+    position: relative;
+}
+
+.caption-wrapper::after {
+    content: "คลิกเพื่อคัดลอก (Click to copy)";
+    position: absolute;
+    bottom: 4px;
+    right: 8px;
+    font-size: 0.68rem;
+    color: var(--win-text-muted);
+}
+
+.caption-wrapper:hover {
+    background: #fdfdfd;
+}
+
+.caption-wrapper.copied {
+    background: #c1ffd4 !important;
+}
+
+.caption-wrapper.copied::after {
+    content: "คัดลอกแล้ว! (Copied!)" !important;
+    color: var(--success-green) !important;
+    font-weight: bold;
+}
+
+.post-caption {
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+}
+
+.media-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gallery-item-wrapper {
+    background: #e6e6e6;
+    border: 1px solid var(--win-shadow);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.gallery-image, .gallery-video {
+    width: 100%;
+    max-height: 360px;
+    object-fit: contain;
+    background: #000;
+}
+
+.media-item-actions {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 10;
+}
+
+/* Right preview side (Comments & Note & Schedule) */
+.comments-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comments-list {
+    max-height: 200px;
+    background: #fff;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-shadow-dark), 
+                inset -1.5px -1.5px 0px var(--win-highlight);
+    overflow-y: auto;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.comment-item {
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 6px;
+}
+
+.comment-author-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+}
+
+.comment-avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+}
+
+.comment-username {
+    font-weight: bold;
+    font-size: 0.78rem;
+}
+
+.comment-text {
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 4px;
+    border: 1px dashed transparent;
+}
+
+.comment-text:hover {
+    background: #e6e6e6;
+    border: 1px dashed var(--win-shadow);
+}
+
+.comment-text.copied {
+    background: #c1ffd4 !important;
+    border: 1px solid var(--success-green) !important;
+    color: var(--success-green) !important;
+}
+
+/* Note Section */
+.note-section h4, .scheduler-section h4 {
+    margin: -15px -15px 5px -15px !important;
+}
+
+/* Scheduler widgets details */
+#post-schedule-time {
+    padding-left: 8px;
+}
+
+#clear-schedule-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0 !important;
+}
+
+/* Warnings / Info Banners */
+#schedule-warning {
+    color: var(--error-red) !important;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+#preview-cooldown-info {
+    border-radius: 0px !important;
+    box-shadow: inset 1px 1px 0px var(--win-shadow-dark), 
+                inset -1px -1px 0px var(--win-highlight);
+}
+
+/* Calendar Modal Retro Window style */
+.calendar-modal-content {
+    background: var(--win-bg) !important;
+    border-radius: 0px !important;
+    box-shadow: inset 1.5px 1.5px 0px var(--win-highlight), 
+                inset -1.5px -1.5px 0px var(--win-shadow), 
+                inset 3px 3px 0px #e6e6e6, 
+                inset -3px -3px 0px var(--win-shadow-dark) !important;
+    padding: 15px !important;
+}
+
+.calendar-modal-header {
+    margin: -15px -15px 15px -15px !important;
+}
+
+#close-calendar-btn {
+    width: 20px !important;
+    height: 20px !important;
+    padding: 0 !important;
+    font-size: 0.75rem !important;
+    box-shadow: inset 1px 1px 0px var(--win-highlight), 
+                inset -1px -1px 0px var(--win-shadow), 
+                inset 2px 2px 0px #e6e6e6, 
+                inset -2px -2px 0px var(--win-shadow-dark) !important;
+}
+
+#calendar-days-grid .calendar-day {
+    background: #ffffff !important;
+    border: 1px solid var(--win-shadow) !important;
+    border-radius: 0px !important;
+}
+
+#calendar-days-grid .calendar-day.padding-day {
+    background: var(--win-bg) !important;
+    color: var(--win-text-muted) !important;
+}
+
+/* Footer */
+.app-footer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #e6e6e6;
+    margin-top: 30px;
+}
+
+#open-creator-btn {
+    background: #000080 !important;
+    color: #ffffff !important;
+    font-weight: bold !important;
+}
+
+#open-creator-btn:active {
+    background: #000080 !important;
+    color: #ffffff !important;
+}
+
+.history-item {
+    position: relative !important;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.desktop-version-tag {
+    position: fixed;
+    bottom: 12px;
+    right: 15px;
+    color: rgba(255, 255, 255, 0.45);
+    font-family: var(--font-win);
+    font-size: 0.88rem;
+    font-weight: bold;
+    user-select: none;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Active label buttons styling (Win98 Style) */
+.label-btn {
+    background: var(--win-bg) !important;
+    border: 2px solid !important;
+    border-color: var(--win-highlight) var(--win-shadow) var(--win-shadow) var(--win-highlight) !important;
+    padding: 3px 6px !important;
+    cursor: pointer;
+    font-size: 0.72rem !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 20px;
+    box-sizing: border-box;
+}
+.label-btn:active, .label-btn.active {
+    border-color: var(--win-shadow) var(--win-highlight) var(--win-highlight) var(--win-shadow) !important;
+    background: #e6e6e6 !important;
+    box-shadow: inset 1px 1px 0px rgba(0,0,0,0.15) !important;
+}
+.label-btn.active .fa-heart {
+    color: #ff4b72 !important;
+}
+.label-btn.active .fa-star {
+    color: #ffb800 !important;
+}
+.label-btn.active .fa-bookmark {
+    color: #008080 !important;
+}
+.label-btn .fa-heart, .label-btn .fa-star, .label-btn .fa-bookmark {
+    color: #555;
+    transition: color 0.12s ease;
+}

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threads Downloader - Save Posts, Images, Videos & Comments</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style -->
+    <link rel="stylesheet" href="index.css">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="background-decor">
+        <div class="blur-orb orb-1"></div>
+        <div class="blur-orb orb-2"></div>
+    </div>
+ 
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-brands fa-threads logo-icon"></i>
+                <h1>Threads<span>Saver</span></h1>
+            </div>
+            <p class="tagline">Save captions, high-quality images, videos, and full comment lists locally on your PC.</p>
+        </header>
+ 
+        <!-- Main Workspace Layout -->
+        <div class="workspace-layout">
+            <!-- Sidebar Panel: History -->
+            <aside class="sidebar-panel glass-card">
+                <div class="win98-title-bar">
+                    <span><i class="fa-solid fa-history"></i> History Explorer</span>
+                    <div class="win-window-controls">
+                        <button class="win-btn-minimize" disabled>_</button>
+                        <button class="win-btn-maximize" disabled>🗖</button>
+                        <button class="win-btn-close" disabled>X</button>
+                    </div>
+                </div>
+                <div class="sidebar-header" style="border-bottom: 2px solid var(--win-shadow); background: var(--win-bg); padding: 5px; display: flex; flex-direction: column; gap: 5px;">
+                    <!-- Row 1: Planner controls -->
+                    <div class="sidebar-toolbar-row" style="display: flex; gap: 4px; width: 100%;">
+                        <button id="open-calendar-btn" title="ดูตารางปฏิทิน" style="flex: 1; padding: 4px 2px !important; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                            <i class="fa-solid fa-calendar-days"></i> ปฏิทิน
+                        </button>
+                        <button id="open-creator-btn" title="สร้างโพสต์ใหม่ด้วยตนเอง" style="flex: 1; padding: 4px 2px !important; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                            <i class="fa-solid fa-plus"></i> บวก
+                        </button>
+                        <button id="random-post-btn" title="สุ่มโพสต์ที่ยังไม่ได้ลง" style="flex: 1; padding: 4px 2px !important; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                            <i class="fa-solid fa-dice"></i> สุ่ม
+                        </button>
+                    </div>
+                    <!-- Row 2: Settings, Backup, Help & Sort -->
+                    <div class="sidebar-toolbar-row" style="display: flex; gap: 4px; width: 100%; align-items: center;">
+                        <button id="open-settings-btn" title="ตั้งค่าระบบ" style="flex: 1; padding: 4px 2px !important; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                            <i class="fa-solid fa-gear"></i> ตั้งค่า
+                        </button>
+                        <button id="open-backup-btn" title="จัดการข้อมูลสำรอง" style="flex: 1; padding: 4px 2px !important; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                            <i class="fa-solid fa-file-export"></i> สำรอง
+                        </button>
+                        <button id="open-help-btn" title="คู่มือวิธีใช้งาน" style="flex: 1; padding: 4px 2px !important; font-size: 0.8rem; display: flex; align-items: center; justify-content: center; gap: 3px;">
+                            <i class="fa-solid fa-circle-question"></i> คู่มือ
+                        </button>
+                        <select id="history-sort" class="sort-select" style="width: 70px; padding: 2px !important; font-family: var(--font-win); font-size: 0.75rem; height: 22px;">
+                            <option value="newest">ใหม่สุด</option>
+                            <option value="oldest">เก่าสุด</option>
+                        </select>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--win-text-muted); margin: 2px 0;">Click to load, drag media directly.</p>
+                    <div class="filter-row">
+                        <button class="filter-btn active" data-filter="all" title="ทั้งหมด (All)">
+                            <i class="fa-solid fa-list"></i>
+                        </button>
+                        <button class="filter-btn" data-filter="heart" title="ใจ (Heart)">
+                            <i class="fa-solid fa-heart" style="color: #ff4b72;"></i>
+                        </button>
+                        <button class="filter-btn" data-filter="star" title="ดาว (Star)">
+                            <i class="fa-solid fa-star" style="color: #ffb800;"></i>
+                        </button>
+                        <button class="filter-btn" data-filter="save" title="Save">
+                            <i class="fa-solid fa-bookmark" style="color: #00bfff;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="history-list" class="history-list">
+                    <p class="empty-history">No past downloads found.</p>
+                </div>
+            </aside>
+ 
+            <!-- Main Content Area -->
+            <main class="main-content">
+            <div class="glass-card input-card">
+                <div class="win98-title-bar">
+                    <span><i class="fa-solid fa-cloud-arrow-down"></i> Download Post</span>
+                    <div class="win-window-controls">
+                        <button class="win-btn-minimize" disabled>_</button>
+                        <button class="win-btn-maximize" disabled>🗖</button>
+                        <button class="win-btn-close" disabled>X</button>
+                    </div>
+                </div>
+                <p style="font-size: 0.75rem; color: var(--win-text-muted); margin-bottom: 5px;">Enter the link of any public Threads post below.</p>
+                
+                <form id="download-form" class="download-form">
+                    <div class="input-row">
+                        <div class="input-wrapper">
+                            <i class="fa-solid fa-link input-icon"></i>
+                            <input type="url" id="threads-url" placeholder="https://www.threads.net/@username/post/..." required autocomplete="off">
+                        </div>
+                        <button type="submit" id="submit-btn" class="btn btn-primary">
+                            <span>Download Now</span>
+                            <i class="fa-solid fa-circle-arrow-right btn-icon"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="options-row">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="include-comments">
+                            <span class="custom-checkbox"></span>
+                            <span>ดาวน์โหลดคอมเมนต์ด้วย (Include comments)</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+ 
+            <!-- Loader / Steps Tracker (Hidden by default) -->
+            <div id="status-card" class="glass-card status-card hidden">
+                <div class="win98-title-bar">
+                    <span><i class="fa-solid fa-spinner fa-spin"></i> Downloading Content</span>
+                    <div class="win-window-controls">
+                        <button class="win-btn-minimize" disabled>_</button>
+                        <button class="win-btn-maximize" disabled>🗖</button>
+                        <button class="win-btn-close" disabled>X</button>
+                    </div>
+                </div>
+                <div class="steps-tracker">
+                    <div class="step" id="step-connect">
+                        <div class="step-icon"><i class="fa-solid fa-circle-notch"></i></div>
+                        <div class="step-text">Initializing browser environment...</div>
+                    </div>
+ 
+                    <div class="step" id="step-fetch">
+                        <div class="step-icon"><i class="fa-solid fa-circle-notch"></i></div>
+                        <div class="step-text">Fetching Threads post data...</div>
+                    </div>
+                    <div class="step" id="step-parse">
+                        <div class="step-icon"><i class="fa-solid fa-circle-notch"></i></div>
+                        <div class="step-text">Extracting media & comments JSON...</div>
+                    </div>
+                    <div class="step" id="step-save">
+                        <div class="step-icon"><i class="fa-solid fa-circle-notch"></i></div>
+                        <div class="step-text">Saving files & downloading assets...</div>
+                    </div>
+                </div>
+            </div>
+ 
+            <!-- Error Banner (Hidden by default) -->
+            <div id="error-card" class="glass-card error-card hidden">
+                <div class="win98-title-bar" style="background: linear-gradient(90deg, #800000, #ff0000) !important;">
+                    <span><i class="fa-solid fa-circle-exclamation"></i> Download Failed</span>
+                    <div class="win-window-controls">
+                        <button class="win-btn-close" onclick="document.getElementById('error-card').classList.add('hidden')">X</button>
+                    </div>
+                </div>
+                <p id="error-message" style="font-size: 0.85rem; padding: 10px 5px; color: var(--error-red); font-weight: bold;"></p>
+            </div>
+ 
+            <!-- Preview Card (Hidden by default) -->
+            <div id="preview-card" class="glass-card preview-card hidden">
+                <div class="win98-title-bar">
+                    <span><i class="fa-solid fa-photo-film"></i> Post Preview & Tools</span>
+                    <div class="win-window-controls">
+                        <button class="win-btn-minimize" disabled>_</button>
+                        <button class="win-btn-maximize" disabled>🗖</button>
+                        <button class="win-btn-close" onclick="document.getElementById('preview-card').classList.add('hidden')">X</button>
+                    </div>
+                </div>
+                <div class="success-banner" style="background: var(--win-bg); padding: 8px; border-bottom: 2px solid var(--win-shadow); display: flex; flex-direction: column; gap: 8px;">
+                    <div class="success-info">
+                        <i class="fa-solid fa-circle-check success-icon"></i>
+                        <div>
+                            <h3>Post Saved Successfully!</h3>
+                            <p id="save-location">Saved to C:\Users\l\Downloads\Threads_Downloads\...</p>
+                        </div>
+                    </div>
+                    <div class="banner-actions">
+                        <button id="copy-all-btn" class="btn btn-primary btn-copy-all hidden">
+                            <i class="fa-solid fa-paste"></i>
+                            <span>คัดลอกรูป/วิดีโอทั้งหมด (Copy All Media)</span>
+                        </button>
+                        <button id="open-folder-btn" class="btn btn-secondary">
+                            <i class="fa-solid fa-folder-open"></i>
+                            <span>Open Folder</span>
+                        </button>
+                    </div>
+                </div>
+ 
+                <div class="preview-layout">
+                    <!-- Left: Original Post Content -->
+                    <div class="post-preview">
+                        <h4 class="preview-section-title">Post Preview</h4>
+                        <div class="post-author-box">
+                            <img id="post-author-avatar" src="" alt="Avatar" class="avatar">
+                            <div class="author-meta">
+                                <span id="post-author-name" class="username">username</span>
+                                <span class="badge">Author</span>
+                            </div>
+                        </div>
+                        
+                        <div id="caption-container" class="caption-wrapper hidden">
+                            <p id="post-caption" class="post-caption">Caption text goes here...</p>
+                        </div>
+                        
+                        <!-- Media Container -->
+                        <div id="media-gallery" class="media-gallery hidden">
+                            <!-- Images or Videos will be injected here -->
+                        </div>
+                    </div>
+ 
+                    <!-- Right: Comments List -->
+                    <div class="comments-preview" style="display: flex; flex-direction: column; gap: 20px;">
+                        <div>
+                            <h4 class="preview-section-title">Comments Captured (<span id="comments-count">0</span>)</h4>
+                            <div id="comments-list" class="comments-list">
+                                <!-- Comments will be injected here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Note Section -->
+                        <div class="note-section" style="border-radius: 12px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); padding: 15px; display: flex; flex-direction: column; gap: 10px;">
+                            <h4 class="preview-section-title" style="margin-bottom: 0px; display: flex; align-items: center; width: 100%; gap: 8px; color: var(--text-main); font-size: 0.95rem; font-family: var(--font-heading); font-weight: 600;">
+                                <i class="fa-solid fa-pen-to-square" style="color: var(--primary-blue);"></i> บันทึกโน้ต (Note)
+                                <span id="note-status" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal; margin-left: auto; display: inline-flex; align-items: center; gap: 4px; transition: var(--transition-smooth); opacity: 0;"></span>
+                            </h4>
+                            <textarea id="post-note" placeholder="เขียนโน้ตเพิ่มเติมสำหรับโฟลเดอร์นี้ (บันทึกอัตโนมัติ)..." style="width: 100%; height: 90px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); font-family: var(--font-body); font-size: 0.88rem; padding: 10px; resize: none; outline: none; transition: var(--transition-smooth);"></textarea>
+                            <button id="save-note-btn" class="hidden"></button>
+                        </div>
+
+                        <!-- Scheduler Section -->
+                        <div class="scheduler-section" style="border-radius: 12px; background: rgba(0, 0, 0, 0.2); border: 1px solid var(--glass-border); padding: 15px; display: flex; flex-direction: column; gap: 10px;">
+                            <h4 class="preview-section-title" style="margin-bottom: 0px; display: flex; align-items: center; width: 100%; gap: 8px; color: var(--text-main); font-size: 0.95rem; font-family: var(--font-heading); font-weight: 600;">
+                                <i class="fa-solid fa-calendar-days" style="color: var(--primary-violet);"></i> ตั้งเวลาลงคลิป (Schedule)
+                                <span id="schedule-status" style="font-size: 0.75rem; color: var(--text-muted); font-weight: normal; margin-left: auto; display: inline-flex; align-items: center; gap: 4px; transition: var(--transition-smooth); opacity: 0;"></span>
+                            </h4>
+                            <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
+                                <input type="datetime-local" id="post-schedule-time" style="flex-grow: 1; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--glass-border); border-radius: 8px; color: var(--text-main); font-family: var(--font-body); font-size: 0.88rem; padding: 8px; outline: none; transition: var(--transition-smooth);" />
+                                <button id="clear-schedule-btn" class="btn btn-secondary" style="padding: 8px 12px; font-size: 0.8rem; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; height: 36px; width: 36px;" title="ล้างเวลา"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                            <div id="schedule-warning" style="display: none; font-size: 0.82rem; color: #ffb800; background: rgba(255, 184, 0, 0.1); border: 1px solid rgba(255, 184, 0, 0.2); padding: 8px 12px; border-radius: 8px; align-items: center; gap: 6px;">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span id="schedule-warning-text"></span>
+                            </div>
+                            <button id="toggle-posted-btn" style="width: 100%; border: none; border-radius: 8px; padding: 10px; font-family: var(--font-body); font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: var(--transition-smooth); background: var(--success-green); color: white;">
+                                <i class="fa-solid fa-circle-check"></i> ลงได้ (Ready to Post)
+                            </button>
+                            <div id="preview-cooldown-info" style="display: none; font-size: 0.82rem; color: var(--text-muted); align-items: center; gap: 6px; margin-top: 5px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 8px 12px; border-radius: 8px;">
+                                <i class="fa-solid fa-hourglass-half"></i>
+                                <span id="preview-cooldown-text"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+ 
+    <!-- Calendar Modal -->
+    <div id="calendar-modal" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth);">
+        <div class="calendar-modal-content glass-card" style="width: 90%; max-width: 800px; padding: 25px; border-radius: 16px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 20px; max-height: 90vh; overflow-y: auto; background: rgba(18, 18, 24, 0.85); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <div class="calendar-modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border); padding-bottom: 15px;">
+                <h3 style="margin: 0; font-family: var(--font-heading); color: var(--text-main); font-size: 1.3rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-calendar-days" style="color: var(--primary-violet);"></i> ตารางงานลงคลิป (Schedule Calendar)
+                </h3>
+                <button id="close-calendar-btn" style="background: transparent; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; transition: var(--transition-smooth); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="calendar-controls" style="display: flex; justify-content: space-between; align-items: center;">
+                <button id="prev-month-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-main); border-radius: 6px;"><i class="fa-solid fa-chevron-left"></i> เดือนก่อนหน้า</button>
+                <h4 id="calendar-month-title" style="margin: 0; font-family: var(--font-heading); color: var(--text-main); font-size: 1.1rem; font-weight: 600;"></h4>
+                <button id="next-month-btn" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-main); border-radius: 6px;">เดือนถัดไป <i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            
+            <div class="calendar-grid-container" style="width: 100%;">
+                <!-- Days of week -->
+                <div class="calendar-weekdays-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: bold; color: var(--text-muted); font-size: 0.8rem; margin-bottom: 10px;">
+                    <div>อา.</div><div>จ.</div><div>อ.</div><div>พ.</div><div>พฤ.</div><div>ศ.</div><div>ส.</div>
+                </div>
+                <!-- Days of month -->
+                <div id="calendar-days-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Custom Post Creator Modal -->
+    <div id="creator-modal" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth);">
+        <div class="calendar-modal-content glass-card" style="width: 90%; max-width: 550px; padding: 15px; border-radius: 0px; border: none; display: flex; flex-direction: column; gap: 12px; max-height: 90vh; overflow-y: auto;">
+            <div class="win98-title-bar" style="margin: -15px -15px 5px -15px !important;">
+                <span><i class="fa-solid fa-plus"></i> สร้างโพสต์ใหม่ด้วยตนเอง (Create Custom Post)</span>
+                <div class="win-window-controls">
+                    <button id="close-creator-title-btn">X</button>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 0.8rem; font-weight: bold;">ชื่อผู้ใช้ (Username):</label>
+                <input type="text" id="creator-username" placeholder="ใส่ชื่อผู้ใช้ (เช่น my_post)..." value="my_post" style="padding-left: 8px;" />
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 0.8rem; font-weight: bold;">คำโพส / แคปชั่น (Caption):</label>
+                <textarea id="creator-caption" placeholder="เขียนข้อความแคปชั่นหลักของโพสต์..." style="height: 80px; resize: none;"></textarea>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 0.8rem; font-weight: bold;">ไฟล์สื่อประกอบ (Images & Videos):</label>
+                <div id="creator-dropzone" style="border: 2px dashed var(--win-shadow); padding: 15px; text-align: center; background: #fff; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 1.6rem; color: var(--win-shadow);"></i>
+                    <span style="font-size: 0.8rem; font-weight: bold;">ลากไฟล์รูปภาพ/วิดีโอมาวางที่นี่</span>
+                    <span style="font-size: 0.7rem; color: var(--win-text-muted);">หรือคลิกที่นี่เพื่อเลือกไฟล์จากคอมพิวเตอร์</span>
+                    <input type="file" id="creator-file-input" multiple accept="image/*,video/*" style="display: none;" />
+                </div>
+                <div id="creator-previews" style="display: flex; gap: 6px; flex-wrap: wrap; margin-top: 5px; background: #fff; min-height: 50px; padding: 4px; box-shadow: inset 1px 1px 0px var(--win-shadow-dark);">
+                    <p style="font-size: 0.75rem; color: var(--win-text-muted); font-style: italic; width: 100%; text-align: center; line-height: 42px; margin: 0;">ยังไม่มีไฟล์แนบ (No attached files)</p>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label style="font-size: 0.8rem; font-weight: bold;">บันทึกโน้ต / พิกัดร้าน (Note):</label>
+                <textarea id="creator-note" placeholder="เขียนโน้ตพิกัด/พิกัดของร้านค้าเพิ่มเติม..." style="height: 60px; resize: none;"></textarea>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 5px; border-top: 1px solid var(--win-shadow); padding-top: 10px;">
+                <button id="save-creator-btn" class="btn btn-primary" style="font-weight: bold;"><i class="fa-solid fa-save"></i> บันทึก (Save)</button>
+                <button id="close-creator-btn" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> ยกเลิก (Cancel)</button>
+            </div>
+        </div>
+    </div>
+        <footer class="app-footer">
+            <p>&copy; 2026 ThreadsSaver. Personal use tool. Not affiliated with Meta or Threads.</p>
+        </footer>
+    </div>
+ 
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth);">
+        <div class="calendar-modal-content glass-card" style="width: 90%; max-width: 500px; padding: 15px; border-radius: 0px; border: none; display: flex; flex-direction: column; gap: 12px; max-height: 90vh; overflow-y: auto;">
+            <div class="win98-title-bar" style="margin: -15px -15px 5px -15px !important;">
+                <span><i class="fa-solid fa-gear"></i> ตั้งค่าระบบ (Settings)</span>
+                <div class="win-window-controls">
+                    <button id="close-settings-title-btn">X</button>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+                <label style="font-size: 0.8rem; font-weight: bold; display: flex; align-items: center; gap: 4px; color: var(--win-text);"><i class="fa-solid fa-folder-open" style="color: #000080;"></i> โฟลเดอร์เก็บไฟล์คิวงาน (Download Directory Path):</label>
+                <input type="text" id="settings-downloads-dir" placeholder="E:\Threads_Downloads" style="padding-left: 8px; width: 100%; box-sizing: border-box; height: 26px;" />
+                <span style="font-size: 0.75rem; color: var(--win-text-muted); font-style: italic;">*ใช้สำหรับการเปิดรันเฉพาะโหมดเครื่องคอมพิวเตอร์ PC ท้องถิ่น (Localhost)*</span>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 5px; border-top: 1px solid var(--win-shadow); padding-top: 10px;">
+                <button id="save-settings-btn" class="btn btn-primary" style="font-weight: bold;"><i class="fa-solid fa-save"></i> บันทึกตั้งค่า (Save)</button>
+                <button id="close-settings-btn" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> ยกเลิก (Cancel)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Backup / Export / Import Modal -->
+    <div id="backup-modal" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth);">
+        <div class="calendar-modal-content glass-card" style="width: 90%; max-width: 500px; padding: 15px; border-radius: 0px; border: none; display: flex; flex-direction: column; gap: 12px; max-height: 90vh; overflow-y: auto;">
+            <div class="win98-title-bar" style="margin: -15px -15px 5px -15px !important;">
+                <span><i class="fa-solid fa-file-export"></i> จัดการข้อมูลสำรอง (Backup Manager)</span>
+                <div class="win-window-controls">
+                    <button id="close-backup-title-btn">X</button>
+                </div>
+            </div>
+            
+            <div style="border-bottom: 2px solid var(--win-shadow); padding-bottom: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <h4 style="margin: 0; font-size: 0.85rem; font-weight: bold;"><i class="fa-solid fa-file-import" style="color: #008000;"></i> นำเข้าข้อมูล (Import)</h4>
+                <p style="font-size: 0.75rem; color: var(--win-text-muted); margin: 0;">อัปโหลดไฟล์ backup .json เพื่อนำเข้าประวัติคิวงานมายังเครื่องนี้</p>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <input type="file" id="import-file-input" accept=".json" style="font-size: 0.8rem; flex-grow: 1;" />
+                    <button id="import-btn" class="btn btn-primary" style="font-size: 0.8rem; padding: 4px 10px !important;"><i class="fa-solid fa-upload"></i> นำเข้า (Import)</button>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px; flex-grow: 1;">
+                <h4 style="margin: 0; font-size: 0.85rem; font-weight: bold;"><i class="fa-solid fa-file-export" style="color: #000080;"></i> ส่งออกข้อมูล (Export)</h4>
+                <p style="font-size: 0.75rem; color: var(--win-text-muted); margin: 0;">เลือกโพสต์ที่ต้องการดาวน์โหลดเก็บไว้เป็นไฟล์สำรอง</p>
+                
+                <div style="display: flex; gap: 8px; align-items: center; margin-top: 2px;">
+                    <button id="export-select-all-btn" class="btn" style="font-size: 0.75rem; padding: 2px 6px !important;">เลือกทั้งหมด (Select All)</button>
+                    <button id="export-deselect-all-btn" class="btn" style="font-size: 0.75rem; padding: 2px 6px !important;">ไม่เลือกเลย (Deselect All)</button>
+                </div>
+                
+                <!-- List box with checkboxes -->
+                <div id="export-list-box" style="border: 2px inset var(--win-shadow); background: var(--win-input-bg); color: var(--win-text); padding: 5px; height: 150px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 4px;">
+                    <p style="font-size: 0.75rem; color: var(--win-text-muted); text-align: center; margin-top: 50px;">ไม่มีข้อมูลสำหรับส่งออก</p>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; margin-top: 5px;">
+                    <button id="export-btn" class="btn btn-primary" style="font-weight: bold; font-size: 0.8rem;"><i class="fa-solid fa-download"></i> ดาวน์โหลดไฟล์สำรอง (.json)</button>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--win-shadow); padding-top: 10px; margin-top: 5px;">
+                <button id="close-backup-btn" class="btn btn-secondary"><i class="fa-solid fa-xmark"></i> ปิดหน้าต่าง (Close)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help / How to Use Modal -->
+    <div id="help-modal" class="modal-overlay hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; transition: var(--transition-smooth);">
+        <div class="calendar-modal-content glass-card" style="width: 95%; max-width: 550px; padding: 15px; border-radius: 0px; border: none; display: flex; flex-direction: column; gap: 12px; max-height: 90vh; overflow-y: auto;">
+            <div class="win98-title-bar" style="margin: -15px -15px 5px -15px !important;">
+                <span><i class="fa-solid fa-circle-question"></i> คู่มือการใช้งานระบบ (Help Manual)</span>
+                <div class="win-window-controls">
+                    <button id="close-help-title-btn">X</button>
+                </div>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; font-family: var(--font-win); color: var(--win-text); font-size: 0.85rem; line-height: 1.4;">
+                <div style="border: 2px inset var(--win-shadow); background: var(--win-input-bg); padding: 10px; max-height: 60vh; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;">
+                    
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: #000080; border-bottom: 1px solid #c0c0c0; padding-bottom: 3px;"><i class="fa-solid fa-mobile-screen-button"></i> 1. วิธีติดตั้งเป็นแอปบนมือถือ (PWA)</h4>
+                        <p style="margin: 3px 0 0 10px;"><strong>สำหรับ iPhone (iOS):</strong> เปิดเบราว์เซอร์ Safari ➡️ กดปุ่มแชร์ 📤 (ไอคอนลูกศรชี้ขึ้นด้านล่าง) ➡️ เลือก "เพิ่มไปยังหน้าจอโฮม (Add to Home Screen)"</p>
+                        <p style="margin: 3px 0 0 10px;"><strong>สำหรับ Android:</strong> เปิด Chrome ➡️ กดเมนู 3 จุดขวาบน ➡️ เลือก "ติดตั้งแอป (Install App)" หรือ "เพิ่มลงในหน้าจอหลัก"</p>
+                        <p style="margin: 3px 0 0 10px; font-size: 0.78rem; color: var(--win-text-muted); font-style: italic;">*เมื่อติดตั้งสำเร็จ จะแสดงผลเป็นแอปเต็มหน้าจอไม่มีขอบเบราว์เซอร์ สะดวกในการหยิบใช้จากหน้าจอหลัก*</p>
+                    </div>
+
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: #000080; border-bottom: 1px solid #c0c0c0; padding-bottom: 3px;"><i class="fa-solid fa-plus-circle"></i> 2. การสร้างและจัดการโพสต์</h4>
+                        <p style="margin: 3px 0 0 10px;">• กดปุ่ม ➕ <strong>(บวก)</strong> บนแถบเครื่องมือซ้าย เพื่อเขียนโพสต์ใหม่</p>
+                        <p style="margin: 3px 0 0 10px;">• พิมพ์ชื่อผู้ใช้, แคปชั่นหลัก, ลากภาพหรือวิดีโอมาวางเพื่อแนบ (ได้หลายไฟล์พร้อมกัน) และบันทึกโน้ต/พิกัดร้านที่ท้ายโพสต์</p>
+                        <p style="margin: 3px 0 0 10px;">• กำหนดวันเวลาที่จะลงเพื่อจัดวางลงในตารางปฏิทิน</p>
+                    </div>
+
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: #000080; border-bottom: 1px solid #c0c0c0; padding-bottom: 3px;"><i class="fa-solid fa-palette"></i> 3. สีกรอบสถานะคิวงาน</h4>
+                        <p style="margin: 3px 0 0 10px;"><span style="color: var(--success-green); font-weight: bold;">🟢 ขอบสีเขียว:</span> โพสต์พร้อมใช้งาน ไม่มีเวลาคิวหรือเลยคิวแล้ว และไม่ติดคูลดาวน์</p>
+                        <p style="margin: 3px 0 0 10px;"><span style="color: #ffb800; font-weight: bold;">🟡 ขอบสีเหลือง:</span> โพสต์ที่ตั้งเวลาล่วงหน้าไว้ในอนาคต (กำลังรอลงตามเวลา)</p>
+                        <p style="margin: 3px 0 0 10px;"><span style="color: var(--error-red); font-weight: bold;">🔴 ขอบสีแดง:</span> โพสต์ที่ถูกกดเช็ค "ลงแล้ว" หรืออยู่ในช่วงคูลดาวน์ 24 ชั่วโมงเพื่อความปลอดภัย</p>
+                    </div>
+
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: #000080; border-bottom: 1px solid #c0c0c0; padding-bottom: 3px;"><i class="fa-solid fa-file-export"></i> 4. การสำรองและย้ายข้อมูล (Export/Import)</h4>
+                        <p style="margin: 3px 0 0 10px;">• เพื่อแบ็คอัปข้อมูลกันหาย หรือโอนไฟล์จาก PC ไปมือถือ หรือส่งต่อให้คนอื่น ให้กดปุ่ม 💾 <strong>(สำรอง)</strong></p>
+                        <p style="margin: 3px 0 0 10px;">• เลือกโพสต์ที่คุณต้องการแล้วกด <strong>ดาวน์โหลดไฟล์สำรอง (.json)</strong></p>
+                        <p style="margin: 3px 0 0 10px;">• ที่เครื่องปลายทาง ให้เปิดหน้านี้ขึ้นมา แล้วกดนำเข้าไฟล์ `.json` ดังกล่าว ข้อมูล โพสต์ และไฟล์มีเดียทั้งหมดจะไปปรากฏทันที!</p>
+                    </div>
+
+                    <div>
+                        <h4 style="margin: 0 0 5px 0; color: #000080; border-bottom: 1px solid #c0c0c0; padding-bottom: 3px;"><i class="fa-solid fa-shield-halved"></i> 5. ความเป็นส่วนตัวสูงสุด (Privacy)</h4>
+                        <p style="margin: 3px 0 0 10px;">• แอปนี้ทำงานในระบบ **เครื่องใครเครื่องมัน 100%**</p>
+                        <p style="margin: 3px 0 0 10px;">• ไฟล์ภาพ วิดีโอ และรายละเอียดคิวงานของคุณทั้งหมดจะถูกบันทึกในหน่วยความจำส่วนตัวในโทรศัพท์มือถือ/คอมพิวเตอร์ของคุณเองอย่างปลอดภัย ไม่มีการส่งข้อมูลไปเก็บในเครื่องผู้อื่นอย่างแน่นอน</p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--win-shadow); padding-top: 10px; margin-top: 5px;">
+                <button id="close-help-btn" class="btn btn-secondary"><i class="fa-solid fa-check"></i> เข้าใจแล้ว (Close)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JS -->
+    <script src="app.js"></script>
+    
+    <!-- Retro Version Tag -->
+    <div class="desktop-version-tag">v2</div>
+ </body>
+ </html>
